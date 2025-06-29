@@ -1,113 +1,90 @@
 import { useCart } from '../context/CartContext';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Checkout() {
   const { cart, clearCart } = useCart();
-  const [form, setForm] = useState({
-    name: '',
-    cardNumber: '',
-    expiry: '',
-    cvv: '',
-  });
+  const [cardNumber, setCardNumber] = useState('');
+  const [name, setName] = useState('');
+  const [expiry, setExpiry] = useState('');
+  const [cvv, setCvv] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [feedback, setFeedback] = useState('');
 
-  const total = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2);
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = () => {
-    const { name, cardNumber, expiry, cvv } = form;
-    if (!name || !cardNumber || !expiry || !cvv) {
-      alert("Please fill out all fields.");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!cardNumber || !name || !expiry || !cvv) {
+      alert('Please fill in all the payment fields!');
       return;
     }
-
-    alert(` Purchase complete! Thank you, ${name}.`);
-    clearCart();
     setSubmitted(true);
+    clearCart();
   };
 
+  if (submitted) {
+    return (
+      <div className="max-w-xl mx-auto p-8">
+        {/* ✅ Breadcrumb */}
+        <div className="text-sm text-gray-500 mb-6 pt-4">
+          <span className="text-gray-400">Home</span> / <span className="text-gray-400">Cart</span> / <span className="text-gray-700 font-medium">Checkout</span>
+        </div>
+
+        <h1 className="text-2xl font-bold mb-4">Thank You!</h1>
+        <p className="text-green-600">✅ Your purchase was successful. Enjoy your tea!</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-10 max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Checkout</h1>
+    <div className="max-w-xl mx-auto p-8">
+      <div className="text-sm text-gray-500 mb-6 pt-4">
+        <span className="text-gray-400">Home</span> / <span className="text-gray-400">Cart</span> / <span className="text-gray-700 font-medium">Checkout</span>
+      </div>
 
-      {!submitted ? (
-        <>
-          <div className="space-y-4">
-            <input
-              type="text"
-              name="name"
-              placeholder="Cardholder Name"
-              value={form.name}
-              onChange={handleChange}
-              className="w-full border p-2 rounded"
-            />
-            <input
-              type="text"
-              name="cardNumber"
-              placeholder="Card Number"
-              value={form.cardNumber}
-              onChange={handleChange}
-              className="w-full border p-2 rounded"
-            />
-            <div className="flex space-x-4">
-              <input
-                type="text"
-                name="expiry"
-                placeholder="MM/YY"
-                value={form.expiry}
-                onChange={handleChange}
-                className="w-1/2 border p-2 rounded"
-              />
-              <input
-                type="text"
-                name="cvv"
-                placeholder="CVV"
-                value={form.cvv}
-                onChange={handleChange}
-                className="w-1/2 border p-2 rounded"
-              />
-            </div>
-          </div>
+      <h1 className="text-2xl font-bold mb-6">Secure Checkout</h1>
 
-          <div className="text-right mt-4 text-lg font-semibold">
-            Total: ${total.toFixed(2)}
-          </div>
-
-          <button
-            onClick={handleSubmit}
-            className="mt-6 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 w-full"
-          >
-            Confirm Purchase
-          </button>
-        </>
-      ) : (
-        <>
-          <h2 className="text-xl font-semibold mt-6 mb-2">Thanks for your purchase!</h2>
-          <p className="text-gray-600 mb-4">We’d love your feedback.</p>
-
-          <textarea
-            rows="4"
-            placeholder="How was your experience?"
-            value={feedback}
-            onChange={(e) => setFeedback(e.target.value)}
-            className="w-full border rounded p-2 mb-4"
-          ></textarea>
-
-          <button
-            onClick={() => alert("Thanks for your feedback! ❤️")}
-            className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 w-full"
-          >
-            Submit Feedback
-          </button>
-        </>
-      )}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          type="text"
+          placeholder="Name on Card"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full border p-2 rounded"
+        />
+        <input
+          type="text"
+          placeholder="Card Number"
+          value={cardNumber}
+          onChange={(e) => setCardNumber(e.target.value)}
+          className="w-full border p-2 rounded"
+        />
+        <div className="flex space-x-4">
+          <input
+            type="text"
+            placeholder="MM/YY"
+            value={expiry}
+            onChange={(e) => setExpiry(e.target.value)}
+            className="w-full border p-2 rounded"
+          />
+          <input
+            type="text"
+            placeholder="CVV"
+            value={cvv}
+            onChange={(e) => setCvv(e.target.value)}
+            className="w-full border p-2 rounded"
+          />
+        </div>
+        <div className="text-right font-semibold text-lg">
+          Total: ${total}
+        </div>
+        <button
+          type="submit"
+          className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 w-full"
+        >
+          Complete Purchase
+        </button>
+      </form>
     </div>
   );
 }
