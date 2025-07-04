@@ -20,6 +20,8 @@ const teaData = [
     type: "Green",
     origin: "Japan",
     caffeineLevel: "Medium",
+    format: "50g loose leaf", // or "20 tea bags"
+
   },
   {
     id: 2,
