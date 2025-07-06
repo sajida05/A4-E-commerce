@@ -13,6 +13,13 @@ export default function Cart() {
   return (
     <div className="p-6 flex justify-center">
       <div className="w-full max-w-2xl">
+        {/* Breadcrumb (now inside the centered container) */}
+        <div className="text-sm text-gray-500 mb-4">
+          <span className="text-gray-400">Home</span> /{" "}
+          <span className="text-gray-400">All Products</span> /{" "}
+          <span className="text-gray-700 font-medium">Your Cart</span>
+        </div>
+
         <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
 
         {cart.length === 0 ? (
@@ -55,7 +62,8 @@ export default function Cart() {
             <button
               onClick={() => navigate('/shop')}
               className="ml-2 text-sm text-green-700 hover:underline"
-            > ← Continue Shopping
+            >
+              ← Continue Shopping
             </button>
           </div>
         )}

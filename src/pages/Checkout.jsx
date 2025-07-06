@@ -22,6 +22,13 @@ export default function Checkout() {
 
   return (
     <div className="max-w-xl mx-auto p-10">
+      {/* Breadcrumb (aligned within the same container) */}
+      <div className="text-sm text-gray-500 mb-4">
+        <span className="text-gray-400">Home</span> /{' '}
+        <span className="text-gray-400">All Products</span> /{' '}
+        <span className="text-gray-700 font-medium">Checkout</span>
+      </div>
+
       <h1 className="text-2xl font-bold mb-6 text-center">Checkout</h1>
 
       {cart.length === 0 && !showSurvey ? (
